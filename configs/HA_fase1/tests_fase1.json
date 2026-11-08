@@ -1,0 +1,345 @@
+[
+ {
+  "from": "HQ-BORDER1",
+  "to": "10.1.255.2",
+  "fam": "IPv4",
+  "grupo": "enlaces HQ",
+  "desc": "L1 HQ-BORDER1 -> HQ-FW1"
+ },
+ {
+  "from": "HQ-BORDER1",
+  "to": "fdce:f6ae:a8d8:10ff::1",
+  "fam": "IPv6",
+  "grupo": "enlaces HQ",
+  "desc": "L1 HQ-BORDER1 -> HQ-FW1"
+ },
+ {
+  "from": "HQ-BORDER1",
+  "to": "10.1.255.6",
+  "fam": "IPv4",
+  "grupo": "enlaces HQ",
+  "desc": "L2 HQ-BORDER1 -> HQ-FW2"
+ },
+ {
+  "from": "HQ-BORDER1",
+  "to": "fdce:f6ae:a8d8:10ff::3",
+  "fam": "IPv6",
+  "grupo": "enlaces HQ",
+  "desc": "L2 HQ-BORDER1 -> HQ-FW2"
+ },
+ {
+  "from": "HQ-BORDER2",
+  "to": "10.1.255.10",
+  "fam": "IPv4",
+  "grupo": "enlaces HQ",
+  "desc": "L3 HQ-BORDER2 -> HQ-FW1"
+ },
+ {
+  "from": "HQ-BORDER2",
+  "to": "fdce:f6ae:a8d8:10ff::5",
+  "fam": "IPv6",
+  "grupo": "enlaces HQ",
+  "desc": "L3 HQ-BORDER2 -> HQ-FW1"
+ },
+ {
+  "from": "HQ-BORDER2",
+  "to": "10.1.255.14",
+  "fam": "IPv4",
+  "grupo": "enlaces HQ",
+  "desc": "L4 HQ-BORDER2 -> HQ-FW2"
+ },
+ {
+  "from": "HQ-BORDER2",
+  "to": "fdce:f6ae:a8d8:10ff::7",
+  "fam": "IPv6",
+  "grupo": "enlaces HQ",
+  "desc": "L4 HQ-BORDER2 -> HQ-FW2"
+ },
+ {
+  "from": "HQ-BORDER1",
+  "to": "10.1.255.18",
+  "fam": "IPv4",
+  "grupo": "enlaces HQ",
+  "desc": "L5 HQ-BORDER1 -> HQ-BORDER2"
+ },
+ {
+  "from": "HQ-BORDER1",
+  "to": "fdce:f6ae:a8d8:10ff::9",
+  "fam": "IPv6",
+  "grupo": "enlaces HQ",
+  "desc": "L5 HQ-BORDER1 -> HQ-BORDER2"
+ },
+ {
+  "from": "HQ-FW1",
+  "to": "10.1.255.22",
+  "fam": "IPv4",
+  "grupo": "enlaces HQ",
+  "desc": "L6 HQ-FW1 -> HQ-FW2"
+ },
+ {
+  "from": "HQ-FW1",
+  "to": "fdce:f6ae:a8d8:10ff::b",
+  "fam": "IPv6",
+  "grupo": "enlaces HQ",
+  "desc": "L6 HQ-FW1 -> HQ-FW2"
+ },
+ {
+  "from": "HQ-FW1",
+  "to": "10.1.255.26",
+  "fam": "IPv4",
+  "grupo": "enlaces HQ",
+  "desc": "L7 HQ-FW1 -> HQ-CORE1"
+ },
+ {
+  "from": "HQ-FW1",
+  "to": "fdce:f6ae:a8d8:10ff::d",
+  "fam": "IPv6",
+  "grupo": "enlaces HQ",
+  "desc": "L7 HQ-FW1 -> HQ-CORE1"
+ },
+ {
+  "from": "HQ-FW1",
+  "to": "10.1.255.30",
+  "fam": "IPv4",
+  "grupo": "enlaces HQ",
+  "desc": "L8 HQ-FW1 -> HQ-CORE2"
+ },
+ {
+  "from": "HQ-FW1",
+  "to": "fdce:f6ae:a8d8:10ff::f",
+  "fam": "IPv6",
+  "grupo": "enlaces HQ",
+  "desc": "L8 HQ-FW1 -> HQ-CORE2"
+ },
+ {
+  "from": "HQ-FW2",
+  "to": "10.1.255.34",
+  "fam": "IPv4",
+  "grupo": "enlaces HQ",
+  "desc": "L9 HQ-FW2 -> HQ-CORE1"
+ },
+ {
+  "from": "HQ-FW2",
+  "to": "fdce:f6ae:a8d8:10ff::11",
+  "fam": "IPv6",
+  "grupo": "enlaces HQ",
+  "desc": "L9 HQ-FW2 -> HQ-CORE1"
+ },
+ {
+  "from": "HQ-FW2",
+  "to": "10.1.255.38",
+  "fam": "IPv4",
+  "grupo": "enlaces HQ",
+  "desc": "L10 HQ-FW2 -> HQ-CORE2"
+ },
+ {
+  "from": "HQ-FW2",
+  "to": "fdce:f6ae:a8d8:10ff::13",
+  "fam": "IPv6",
+  "grupo": "enlaces HQ",
+  "desc": "L10 HQ-FW2 -> HQ-CORE2"
+ },
+ {
+  "from": "HQ-CORE1",
+  "to": "10.1.255.42",
+  "fam": "IPv4",
+  "grupo": "enlaces HQ",
+  "desc": "L11 HQ-CORE1 -> HQ-CORE2"
+ },
+ {
+  "from": "HQ-CORE1",
+  "to": "fdce:f6ae:a8d8:10ff::15",
+  "fam": "IPv6",
+  "grupo": "enlaces HQ",
+  "desc": "L11 HQ-CORE1 -> HQ-CORE2"
+ },
+ {
+  "from": "HQ-CORE1",
+  "to": "10.1.255.46",
+  "fam": "IPv4",
+  "grupo": "enlaces HQ",
+  "desc": "L12 HQ-CORE1 -> HQ-DIST1"
+ },
+ {
+  "from": "HQ-CORE1",
+  "to": "fdce:f6ae:a8d8:10ff::17",
+  "fam": "IPv6",
+  "grupo": "enlaces HQ",
+  "desc": "L12 HQ-CORE1 -> HQ-DIST1"
+ },
+ {
+  "from": "HQ-CORE1",
+  "to": "10.1.255.50",
+  "fam": "IPv4",
+  "grupo": "enlaces HQ",
+  "desc": "L13 HQ-CORE1 -> HQ-DIST2"
+ },
+ {
+  "from": "HQ-CORE1",
+  "to": "fdce:f6ae:a8d8:10ff::19",
+  "fam": "IPv6",
+  "grupo": "enlaces HQ",
+  "desc": "L13 HQ-CORE1 -> HQ-DIST2"
+ },
+ {
+  "from": "HQ-CORE2",
+  "to": "10.1.255.54",
+  "fam": "IPv4",
+  "grupo": "enlaces HQ",
+  "desc": "L14 HQ-CORE2 -> HQ-DIST1"
+ },
+ {
+  "from": "HQ-CORE2",
+  "to": "fdce:f6ae:a8d8:10ff::1b",
+  "fam": "IPv6",
+  "grupo": "enlaces HQ",
+  "desc": "L14 HQ-CORE2 -> HQ-DIST1"
+ },
+ {
+  "from": "HQ-CORE2",
+  "to": "10.1.255.58",
+  "fam": "IPv4",
+  "grupo": "enlaces HQ",
+  "desc": "L15 HQ-CORE2 -> HQ-DIST2"
+ },
+ {
+  "from": "HQ-CORE2",
+  "to": "fdce:f6ae:a8d8:10ff::1d",
+  "fam": "IPv6",
+  "grupo": "enlaces HQ",
+  "desc": "L15 HQ-CORE2 -> HQ-DIST2"
+ },
+ {
+  "from": "HQ-DIST1",
+  "to": "10.1.255.62",
+  "fam": "IPv4",
+  "grupo": "enlaces HQ",
+  "desc": "L16 HQ-DIST1 -> HQ-DIST2"
+ },
+ {
+  "from": "HQ-DIST1",
+  "to": "fdce:f6ae:a8d8:10ff::1f",
+  "fam": "IPv6",
+  "grupo": "enlaces HQ",
+  "desc": "L16 HQ-DIST1 -> HQ-DIST2"
+ },
+ {
+  "from": "HQ-BORDER1",
+  "to": "203.0.113.1",
+  "fam": "IPv4",
+  "grupo": "WAN",
+  "desc": "HQ-BORDER1 -> ISP (WAN)"
+ },
+ {
+  "from": "HQ-BORDER1",
+  "to": "2001:db8:ffff:1::1",
+  "fam": "IPv6",
+  "grupo": "WAN",
+  "desc": "HQ-BORDER1 -> ISP (WAN)"
+ },
+ {
+  "from": "HQ-BORDER2",
+  "to": "203.0.113.5",
+  "fam": "IPv4",
+  "grupo": "WAN",
+  "desc": "HQ-BORDER2 -> ISP (WAN)"
+ },
+ {
+  "from": "HQ-BORDER2",
+  "to": "2001:db8:ffff:2::1",
+  "fam": "IPv6",
+  "grupo": "WAN",
+  "desc": "HQ-BORDER2 -> ISP (WAN)"
+ },
+ {
+  "from": "B1-R1",
+  "to": "203.0.113.9",
+  "fam": "IPv4",
+  "grupo": "WAN",
+  "desc": "B1-R1 -> ISP (WAN)"
+ },
+ {
+  "from": "B1-R1",
+  "to": "2001:db8:ffff:3::1",
+  "fam": "IPv6",
+  "grupo": "WAN",
+  "desc": "B1-R1 -> ISP (WAN)"
+ },
+ {
+  "from": "B1-R2",
+  "to": "203.0.113.17",
+  "fam": "IPv4",
+  "grupo": "WAN",
+  "desc": "B1-R2 -> ISP (WAN)"
+ },
+ {
+  "from": "B1-R2",
+  "to": "2001:db8:ffff:4::1",
+  "fam": "IPv6",
+  "grupo": "WAN",
+  "desc": "B1-R2 -> ISP (WAN)"
+ },
+ {
+  "from": "B2-R1",
+  "to": "203.0.113.13",
+  "fam": "IPv4",
+  "grupo": "WAN",
+  "desc": "B2-R1 -> ISP (WAN)"
+ },
+ {
+  "from": "B2-R2",
+  "to": "203.0.113.21",
+  "fam": "IPv4",
+  "grupo": "WAN",
+  "desc": "B2-R2 -> ISP (WAN)"
+ },
+ {
+  "from": "ISP2",
+  "to": "203.0.113.29",
+  "fam": "IPv4",
+  "grupo": "WAN",
+  "desc": "ISP2 -> ISP1 (peering)"
+ },
+ {
+  "from": "ISP2",
+  "to": "2001:db8:ffff:6::1",
+  "fam": "IPv6",
+  "grupo": "WAN",
+  "desc": "ISP2 -> ISP1 (peering)"
+ },
+ {
+  "from": "B1-R1",
+  "to": "10.2.255.2",
+  "fam": "IPv4",
+  "grupo": "sedes",
+  "desc": "B1-R1 -> B1-R2"
+ },
+ {
+  "from": "B1-R1",
+  "to": "fdce:f6ae:a8d8:20ff::1",
+  "fam": "IPv6",
+  "grupo": "sedes",
+  "desc": "B1-R1 -> B1-R2"
+ },
+ {
+  "from": "B2-R1",
+  "to": "10.3.255.2",
+  "fam": "IPv4",
+  "grupo": "sedes",
+  "desc": "B2-R1 -> B2-R2"
+ },
+ {
+  "from": "ISP1",
+  "to": "8.8.8.8",
+  "fam": "IPv4",
+  "grupo": "Internet",
+  "desc": "ISP1 -> Internet (NAT de GNS3)"
+ },
+ {
+  "from": "ISP2",
+  "to": "8.8.8.8",
+  "fam": "IPv4",
+  "grupo": "Internet",
+  "desc": "ISP2 -> Internet (via ISP1)"
+ }
+]

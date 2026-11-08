@@ -1,0 +1,35 @@
+# --- Material de terceros: NO se sube (enunciado del curso y trabajos de otros grupos) ---
+Antiguo/
+trabajo_descripcion.pdf
+*.pkt
+*.zip
+
+# --- Informes antiguos / imagenes de versiones anteriores de la topologia ---
+Informe_estado_y_reparto_RAC.pdf
+Informe_tecnico_v3_RAC.pdf
+topologia_HQ.png
+topologia_completa.png
+
+# --- Configuracion de la topologia anterior (sustituida por configs/HA_fase1) ---
+configs/fase1/
+
+# --- Variantes antiguas del proyecto GNS3 (solo se usa RAC_Red_HA) ---
+RAC_Trabajo_final/
+RAC_Trabajo_final_v2/
+RAC_Trabajo_final_v2_chrfw/
+RAC_Trabajo_final_v2_chrfw_centrado/
+RAC_Red_Corporativa/
+
+# --- Datos generados en local: logs de ejecucion, imagenes de GNS3, cache de Python ---
+configs/**/logs/
+RAC_Red_HA/project-files/
+RAC_Red_HA/*.gns3.bak
+*.qcow2
+*.img
+__pycache__/
+*.pyc
+
+# --- Nunca subir contrasenas ni claves ---
+.env
+*.key
+*.pem

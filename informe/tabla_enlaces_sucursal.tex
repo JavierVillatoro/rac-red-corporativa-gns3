@@ -1,0 +1,13 @@
+\begingroup\footnotesize
+\begin{longtable}{@{}p{2.6cm}p{1.6cm}p{3.3cm}p{4.6cm}p{3.9cm}@{}}
+\toprule
+\textbf{Router} & \textbf{Puerto} & \textbf{IPv4} & \textbf{IPv6} & \textbf{Enlace}\\
+\midrule
+\endhead
+\cod{B1-R1} & \cod{ether2} & \cod{10.2.255.1/30} & \cod{fdce:f6ae:a8d8:20ff::/127} & enlace B1-R1-B1-R2\\
+\cod{B1-R2} & \cod{ether2} & \cod{10.2.255.2/30} & \cod{fdce:f6ae:a8d8:20ff::1/127} & enlace B1-R2-B1-R1\\
+\cod{B2-R1} & \cod{ether2} & \cod{10.3.255.1/30} & \cod{--} & enlace B2-R1-B2-R2\\
+\cod{B2-R2} & \cod{ether2} & \cod{10.3.255.2/30} & \cod{--} & enlace B2-R2-B2-R1\\
+\bottomrule
+\end{longtable}
+\endgroup

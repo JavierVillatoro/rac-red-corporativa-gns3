@@ -1,0 +1,60 @@
+\begingroup\footnotesize
+\begin{longtable}{@{}p{3.4cm}p{5.2cm}p{1.8cm}p{2cm}p{1.6cm}@{}}
+\toprule
+\textbf{Dispositivo} & \textbf{Tipo} & \textbf{Sede} & \textbf{Rol} & \textbf{RAM (MB)}\\
+\midrule
+\endhead
+\cod{NAT-Internet} & NAT (virbr0) & INET & nat & --\\
+\cod{ISP1} & MikroTik CHR 7.22.1 & INET & router & 256\\
+\cod{ISP2} & MikroTik CHR 7.22.1 & INET & router & 256\\
+\cod{TELETRAB} & Alpine Linux & INET & host & --\\
+\cod{HQ-BORDER1} & MikroTik CHR 7.22.1 & HQ & router & 256\\
+\cod{HQ-BORDER2} & MikroTik CHR 7.22.1 & HQ & router & 256\\
+\cod{HQ-FW1} & MikroTik CHR 7.22.1 & HQ & fw & 256\\
+\cod{HQ-FW2} & MikroTik CHR 7.22.1 & HQ & fw & 256\\
+\cod{SW-DMZ} & Open vSwitch & HQ & switch & --\\
+\cod{HQ-SRV-WEB} & nginx:alpine & HQ & server & --\\
+\cod{HQ-CORE1} & MikroTik CHR 7.22.1 & HQ & ml & 256\\
+\cod{HQ-CORE2} & MikroTik CHR 7.22.1 & HQ & ml & 256\\
+\cod{HQ-DIST1} & MikroTik CHR 7.22.1 & HQ & ml & 256\\
+\cod{HQ-DIST2} & MikroTik CHR 7.22.1 & HQ & ml & 256\\
+\cod{SW-HQ-ACC1} & Open vSwitch & HQ & switch & --\\
+\cod{SW-HQ-ACC2} & Open vSwitch & HQ & switch & --\\
+\cod{SW-HQ-SRV1} & Open vSwitch & HQ & switch & --\\
+\cod{SW-HQ-SRV2} & Open vSwitch & HQ & switch & --\\
+\cod{HQ-PC-INV} & Alpine Linux & HQ & host & --\\
+\cod{HQ-PC-COM} & Alpine Linux & HQ & host & --\\
+\cod{HQ-PC-VEN} & Alpine Linux & HQ & host & --\\
+\cod{HQ-PC-CUR} & Alpine Linux & HQ & host & --\\
+\cod{HQ-PC-SOP} & Alpine Linux & HQ & host & --\\
+\cod{HQ-PC-GUEST} & Alpine Linux & HQ & host & --\\
+\cod{HQ-AP-WIFI} & Alpine Linux & HQ & ap & --\\
+\cod{HQ-SRV-STO1} & Alpine Linux & HQ & server & --\\
+\cod{HQ-SRV-CPU1} & Alpine Linux & HQ & server & --\\
+\cod{HQ-MON} & prom/prometheus:latest & HQ & svc & --\\
+\cod{HQ-GRAFANA} & grafana/grafana:latest & HQ & svc & --\\
+\cod{HQ-SRV-STO2} & Alpine Linux & HQ & server & --\\
+\cod{HQ-SRV-CPU2} & Alpine Linux & HQ & server & --\\
+\cod{HQ-RADIUS} & freeradius/freeradius-server:latest & HQ & svc & --\\
+\cod{B1-R1} & MikroTik CHR 7.22.1 & B1 & router & 256\\
+\cod{B1-R2} & MikroTik CHR 7.22.1 & B1 & router & 256\\
+\cod{SW-B1-ACC1} & Open vSwitch & B1 & switch & --\\
+\cod{SW-B1-ACC2} & Open vSwitch & B1 & switch & --\\
+\cod{B1-PC-INV} & Alpine Linux & B1 & host & --\\
+\cod{B1-PC-COM} & Alpine Linux & B1 & host & --\\
+\cod{B1-PC-VEN} & Alpine Linux & B1 & host & --\\
+\cod{B1-PC-CUR} & Alpine Linux & B1 & host & --\\
+\cod{B1-PC-SOP} & Alpine Linux & B1 & host & --\\
+\cod{B1-PC-GUEST} & Alpine Linux & B1 & host & --\\
+\cod{B1-AP-WIFI} & Alpine Linux & B1 & ap & --\\
+\cod{B2-R1} & MikroTik CHR 7.22.1 & B2 & router & 256\\
+\cod{B2-R2} & MikroTik CHR 7.22.1 & B2 & router & 256\\
+\cod{SW-B2-ACC1} & Open vSwitch & B2 & switch & --\\
+\cod{SW-B2-ACC2} & Open vSwitch & B2 & switch & --\\
+\cod{B2-PC-INV} & Alpine Linux & B2 & host & --\\
+\cod{B2-PC-CUR} & Alpine Linux & B2 & host & --\\
+\cod{B2-PC-GUEST} & Alpine Linux & B2 & host & --\\
+\cod{B2-AP-WIFI} & Alpine Linux & B2 & ap & --\\
+\bottomrule
+\end{longtable}
+\endgroup

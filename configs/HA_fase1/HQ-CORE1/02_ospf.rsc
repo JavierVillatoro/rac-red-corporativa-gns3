@@ -1,0 +1,16 @@
+/routing ospf instance add name=ospf-v2 version=2 router-id=10.1.254.11
+/routing ospf area add name=backbone-v2 area-id=0.0.0.0 instance=ospf-v2
+/routing ospf interface-template add area=backbone-v2 networks=10.1.255.24/30 type=ptp
+/routing ospf interface-template add area=backbone-v2 networks=10.1.255.32/30 type=ptp
+/routing ospf interface-template add area=backbone-v2 networks=10.1.255.40/30 type=ptp
+/routing ospf interface-template add area=backbone-v2 networks=10.1.255.44/30 type=ptp
+/routing ospf interface-template add area=backbone-v2 networks=10.1.255.48/30 type=ptp
+/routing ospf interface-template add area=backbone-v2 networks=10.1.254.11/32 passive=yes
+/routing ospf instance add name=ospf-v3 version=3 router-id=10.1.254.11
+/routing ospf area add name=backbone-v3 area-id=0.0.0.0 instance=ospf-v3
+/routing ospf interface-template add area=backbone-v3 networks=fdce:f6ae:a8d8:10ff::c/127 type=ptp
+/routing ospf interface-template add area=backbone-v3 networks=fdce:f6ae:a8d8:10ff::10/127 type=ptp
+/routing ospf interface-template add area=backbone-v3 networks=fdce:f6ae:a8d8:10ff::14/127 type=ptp
+/routing ospf interface-template add area=backbone-v3 networks=fdce:f6ae:a8d8:10ff::16/127 type=ptp
+/routing ospf interface-template add area=backbone-v3 networks=fdce:f6ae:a8d8:10ff::18/127 type=ptp
+/routing ospf interface-template add area=backbone-v3 networks=fdce:f6ae:a8d8:10fe::11/128 passive=yes

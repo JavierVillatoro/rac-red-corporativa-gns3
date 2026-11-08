@@ -1,0 +1,24 @@
+\begingroup\footnotesize
+\begin{longtable}{@{}p{2.6cm}p{1.6cm}p{3.3cm}p{4.6cm}p{3.9cm}@{}}
+\toprule
+\textbf{Router} & \textbf{Puerto} & \textbf{IPv4} & \textbf{IPv6} & \textbf{Comentario}\\
+\midrule
+\endhead
+\cod{B1-R1} & \cod{ether1} & \cod{203.0.113.10/30} & \cod{2001:db8:ffff:3::2/64} & WAN hacia ISP1\\
+\cod{B1-R2} & \cod{ether1} & \cod{203.0.113.18/30} & \cod{2001:db8:ffff:4::2/64} & WAN hacia ISP2\\
+\cod{B2-R1} & \cod{ether1} & \cod{203.0.113.14/30} & \cod{--} & WAN hacia ISP1\\
+\cod{B2-R2} & \cod{ether1} & \cod{203.0.113.22/30} & \cod{--} & WAN hacia ISP2\\
+\cod{HQ-BORDER1} & \cod{ether1} & \cod{203.0.113.2/30} & \cod{2001:db8:ffff:1::2/64} & WAN hacia ISP1\\
+\cod{HQ-BORDER2} & \cod{ether1} & \cod{203.0.113.6/30} & \cod{2001:db8:ffff:2::2/64} & WAN hacia ISP2\\
+\cod{ISP1} & \cod{ether1} & \cod{203.0.113.29/30} & \cod{2001:db8:ffff:6::1/64} & peering ISP1-ISP2\\
+\cod{ISP1} & \cod{ether3} & \cod{203.0.113.1/30} & \cod{2001:db8:ffff:1::1/64} & WAN ISP1-HQ-BORDER1\\
+\cod{ISP1} & \cod{ether4} & \cod{203.0.113.9/30} & \cod{2001:db8:ffff:3::1/64} & WAN ISP1-B1-R1\\
+\cod{ISP1} & \cod{ether5} & \cod{203.0.113.13/30} & \cod{--} & WAN ISP1-B2-R1\\
+\cod{ISP2} & \cod{ether1} & \cod{203.0.113.30/30} & \cod{2001:db8:ffff:6::2/64} & peering ISP1-ISP2\\
+\cod{ISP2} & \cod{ether2} & \cod{203.0.113.25/30} & \cod{2001:db8:ffff:5::1/64} & Teletrabajador\\
+\cod{ISP2} & \cod{ether3} & \cod{203.0.113.5/30} & \cod{2001:db8:ffff:2::1/64} & WAN ISP2-HQ-BORDER2\\
+\cod{ISP2} & \cod{ether4} & \cod{203.0.113.17/30} & \cod{2001:db8:ffff:4::1/64} & WAN ISP2-B1-R2\\
+\cod{ISP2} & \cod{ether5} & \cod{203.0.113.21/30} & \cod{--} & WAN ISP2-B2-R2\\
+\bottomrule
+\end{longtable}
+\endgroup

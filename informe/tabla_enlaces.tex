@@ -1,0 +1,80 @@
+\begingroup\footnotesize
+\begin{longtable}{@{}p{3cm}p{2.1cm}p{3cm}p{2.1cm}p{5cm}@{}}
+\toprule
+\textbf{Extremo A} & \textbf{Puerto} & \textbf{Extremo B} & \textbf{Puerto} & \textbf{Función}\\
+\midrule
+\endhead
+\cod{ISP1} & \cod{ether1} & \cod{ISP2} & \cod{ether1} & Interconexión de proveedores\\
+\cod{ISP1} & \cod{ether2} & \cod{NAT-Internet} & \cod{nat0} & Internet real (NAT)\\
+\cod{ISP2} & \cod{ether2} & \cod{TELETRAB} & \cod{eth0} & Teletrabajador\\
+\cod{ISP1} & \cod{ether3} & \cod{HQ-BORDER1} & \cod{ether1} & WAN HQ (ISP1)\\
+\cod{ISP2} & \cod{ether3} & \cod{HQ-BORDER2} & \cod{ether1} & WAN HQ (ISP2)\\
+\cod{ISP1} & \cod{ether4} & \cod{B1-R1} & \cod{ether1} & WAN B1 (ISP1)\\
+\cod{ISP2} & \cod{ether4} & \cod{B1-R2} & \cod{ether1} & WAN B1 (ISP2)\\
+\cod{ISP1} & \cod{ether5} & \cod{B2-R1} & \cod{ether1} & WAN B2 (ISP1)\\
+\cod{ISP2} & \cod{ether5} & \cod{B2-R2} & \cod{ether1} & WAN B2 (ISP2)\\
+\cod{HQ-BORDER1} & \cod{ether2} & \cod{HQ-BORDER2} & \cod{ether2} & Interconexión de bordes\\
+\cod{HQ-BORDER1} & \cod{ether3} & \cod{HQ-FW1} & \cod{ether1} & Fuera del firewall\\
+\cod{HQ-BORDER1} & \cod{ether4} & \cod{HQ-FW2} & \cod{ether1} & Fuera del firewall\\
+\cod{HQ-BORDER2} & \cod{ether3} & \cod{HQ-FW1} & \cod{ether2} & Fuera del firewall\\
+\cod{HQ-BORDER2} & \cod{ether4} & \cod{HQ-FW2} & \cod{ether2} & Fuera del firewall\\
+\cod{HQ-FW1} & \cod{ether3} & \cod{HQ-FW2} & \cod{ether3} & Sincronización/VRRP de firewalls\\
+\cod{HQ-FW1} & \cod{ether4} & \cod{HQ-CORE1} & \cod{ether1} & Dentro del firewall\\
+\cod{HQ-FW1} & \cod{ether5} & \cod{HQ-CORE2} & \cod{ether1} & Dentro del firewall\\
+\cod{HQ-FW2} & \cod{ether4} & \cod{HQ-CORE1} & \cod{ether2} & Dentro del firewall\\
+\cod{HQ-FW2} & \cod{ether5} & \cod{HQ-CORE2} & \cod{ether2} & Dentro del firewall\\
+\cod{HQ-FW1} & \cod{ether6} & \cod{SW-DMZ} & \cod{Ethernet0} & DMZ\\
+\cod{HQ-FW2} & \cod{ether6} & \cod{SW-DMZ} & \cod{Ethernet1} & DMZ\\
+\cod{SW-DMZ} & \cod{Ethernet2} & \cod{HQ-SRV-WEB} & \cod{eth0} & Web pública\\
+\cod{HQ-CORE1} & \cod{ether3} & \cod{HQ-CORE2} & \cod{ether3} & Interconexión de core\\
+\cod{HQ-CORE1} & \cod{ether4} & \cod{HQ-DIST1} & \cod{ether1} & Core-distribución\\
+\cod{HQ-CORE1} & \cod{ether5} & \cod{HQ-DIST2} & \cod{ether1} & Core-distribución\\
+\cod{HQ-CORE2} & \cod{ether4} & \cod{HQ-DIST1} & \cod{ether2} & Core-distribución\\
+\cod{HQ-CORE2} & \cod{ether5} & \cod{HQ-DIST2} & \cod{ether2} & Core-distribución\\
+\cod{HQ-DIST1} & \cod{ether3} & \cod{HQ-DIST2} & \cod{ether3} & Interconexión de distribución\\
+\cod{HQ-DIST1} & \cod{ether4} & \cod{SW-HQ-ACC1} & \cod{Ethernet0} & Uplink a DIST1\\
+\cod{HQ-DIST2} & \cod{ether4} & \cod{SW-HQ-ACC1} & \cod{Ethernet1} & Uplink a DIST2\\
+\cod{HQ-DIST1} & \cod{ether5} & \cod{SW-HQ-ACC2} & \cod{Ethernet0} & Uplink a DIST1\\
+\cod{HQ-DIST2} & \cod{ether5} & \cod{SW-HQ-ACC2} & \cod{Ethernet1} & Uplink a DIST2\\
+\cod{HQ-DIST1} & \cod{ether6} & \cod{SW-HQ-SRV1} & \cod{Ethernet0} & Uplink a DIST1\\
+\cod{HQ-DIST2} & \cod{ether6} & \cod{SW-HQ-SRV1} & \cod{Ethernet1} & Uplink a DIST2\\
+\cod{HQ-DIST1} & \cod{ether7} & \cod{SW-HQ-SRV2} & \cod{Ethernet0} & Uplink a DIST1\\
+\cod{HQ-DIST2} & \cod{ether7} & \cod{SW-HQ-SRV2} & \cod{Ethernet1} & Uplink a DIST2\\
+\cod{SW-HQ-ACC1} & \cod{Ethernet2} & \cod{HQ-PC-INV} & \cod{eth0} & Equipo\\
+\cod{SW-HQ-ACC1} & \cod{Ethernet3} & \cod{HQ-PC-COM} & \cod{eth0} & Equipo\\
+\cod{SW-HQ-ACC1} & \cod{Ethernet4} & \cod{HQ-PC-VEN} & \cod{eth0} & Equipo\\
+\cod{SW-HQ-ACC2} & \cod{Ethernet2} & \cod{HQ-PC-CUR} & \cod{eth0} & Equipo\\
+\cod{SW-HQ-ACC2} & \cod{Ethernet3} & \cod{HQ-PC-SOP} & \cod{eth0} & Equipo\\
+\cod{SW-HQ-ACC2} & \cod{Ethernet4} & \cod{HQ-PC-GUEST} & \cod{eth0} & Equipo\\
+\cod{SW-HQ-ACC2} & \cod{Ethernet5} & \cod{HQ-AP-WIFI} & \cod{eth0} & Equipo\\
+\cod{SW-HQ-SRV1} & \cod{Ethernet2} & \cod{HQ-SRV-STO1} & \cod{eth0} & Equipo\\
+\cod{SW-HQ-SRV1} & \cod{Ethernet3} & \cod{HQ-SRV-CPU1} & \cod{eth0} & Equipo\\
+\cod{SW-HQ-SRV1} & \cod{Ethernet4} & \cod{HQ-MON} & \cod{eth0} & Equipo\\
+\cod{SW-HQ-SRV1} & \cod{Ethernet5} & \cod{HQ-GRAFANA} & \cod{eth0} & Equipo\\
+\cod{SW-HQ-SRV2} & \cod{Ethernet2} & \cod{HQ-SRV-STO2} & \cod{eth0} & Equipo\\
+\cod{SW-HQ-SRV2} & \cod{Ethernet3} & \cod{HQ-SRV-CPU2} & \cod{eth0} & Equipo\\
+\cod{SW-HQ-SRV2} & \cod{Ethernet4} & \cod{HQ-RADIUS} & \cod{eth0} & Equipo\\
+\cod{B1-R1} & \cod{ether2} & \cod{B1-R2} & \cod{ether2} & Interconexión de routers\\
+\cod{B1-R1} & \cod{ether3} & \cod{SW-B1-ACC1} & \cod{Ethernet0} & Uplink a B1-R1\\
+\cod{B1-R2} & \cod{ether3} & \cod{SW-B1-ACC1} & \cod{Ethernet1} & Uplink a B1-R2\\
+\cod{B1-R1} & \cod{ether4} & \cod{SW-B1-ACC2} & \cod{Ethernet0} & Uplink a B1-R1\\
+\cod{B1-R2} & \cod{ether4} & \cod{SW-B1-ACC2} & \cod{Ethernet1} & Uplink a B1-R2\\
+\cod{SW-B1-ACC1} & \cod{Ethernet2} & \cod{B1-PC-INV} & \cod{eth0} & Equipo\\
+\cod{SW-B1-ACC1} & \cod{Ethernet3} & \cod{B1-PC-COM} & \cod{eth0} & Equipo\\
+\cod{SW-B1-ACC1} & \cod{Ethernet4} & \cod{B1-PC-VEN} & \cod{eth0} & Equipo\\
+\cod{SW-B1-ACC2} & \cod{Ethernet2} & \cod{B1-PC-CUR} & \cod{eth0} & Equipo\\
+\cod{SW-B1-ACC2} & \cod{Ethernet3} & \cod{B1-PC-SOP} & \cod{eth0} & Equipo\\
+\cod{SW-B1-ACC2} & \cod{Ethernet4} & \cod{B1-PC-GUEST} & \cod{eth0} & Equipo\\
+\cod{SW-B1-ACC1} & \cod{Ethernet5} & \cod{B1-AP-WIFI} & \cod{eth0} & Equipo\\
+\cod{B2-R1} & \cod{ether2} & \cod{B2-R2} & \cod{ether2} & Interconexión de routers\\
+\cod{B2-R1} & \cod{ether3} & \cod{SW-B2-ACC1} & \cod{Ethernet0} & Uplink a B2-R1\\
+\cod{B2-R2} & \cod{ether3} & \cod{SW-B2-ACC1} & \cod{Ethernet1} & Uplink a B2-R2\\
+\cod{B2-R1} & \cod{ether4} & \cod{SW-B2-ACC2} & \cod{Ethernet0} & Uplink a B2-R1\\
+\cod{B2-R2} & \cod{ether4} & \cod{SW-B2-ACC2} & \cod{Ethernet1} & Uplink a B2-R2\\
+\cod{SW-B2-ACC1} & \cod{Ethernet2} & \cod{B2-PC-INV} & \cod{eth0} & Equipo\\
+\cod{SW-B2-ACC1} & \cod{Ethernet3} & \cod{B2-PC-CUR} & \cod{eth0} & Equipo\\
+\cod{SW-B2-ACC2} & \cod{Ethernet2} & \cod{B2-PC-GUEST} & \cod{eth0} & Equipo\\
+\cod{SW-B2-ACC2} & \cod{Ethernet3} & \cod{B2-AP-WIFI} & \cod{eth0} & Equipo\\
+\bottomrule
+\end{longtable}
+\endgroup

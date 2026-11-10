@@ -110,6 +110,14 @@ informe/                        fuentes LaTeX del informe (compilar con XeLaTeX)
 
 ## Estado actual – Fase 1: LAN de HQ (IPv6)
 
+> **Variante "solo IPv6", pendiente de confirmar con el profesor.** Se trabaja en la rama `ipv6-solo` y la configuración está en `configs/IPv6_fase1/`. **No sustituye** a `configs/HA_fase1/` (doble pila, de Javi): si el profesor confirma doble pila, se vuelve a esa. Las diferencias entre las dos están en `configs/IPv6_fase1/LEEME_IPv6.md`.
+
+### Cómo trabajar con esta variante
+1. `git pull` en la rama `ipv6-solo` antes de empezar.
+2. Abrir **siempre** `RAC_Red_HA/RAC_Red_HA.gns3` de este repositorio. No usar copias en otras carpetas: tienen el mismo identificador de proyecto y GNS3 se confunde.
+3. Las configuraciones viven en el GNS3 VM (discos de los CHR, `/etc/openvswitch` de los OVS y *Edit config* de los PCs); en el repositorio se guardan como copia en `configs/IPv6_fase1/`. Si un equipo se rompe, se pega su fichero y queda igual.
+4. Para cerrar: *Stop all nodes* → esperar a que todos estén en rojo → *File → Save project* → salir. Si el `.gns3` ha cambiado, subirlo y avisar al grupo, porque solo una persona puede editarlo a la vez.
+
 ### Decisiones de diseño
 - **HQ y B1 solo con IPv6, B2 solo con IPv4.** La interconexión o traducción entre ellas se decidirá más adelante.
 - Prefijo de HQ: `2001:db8:1::/48` (prefijo de documentación, al ser un entorno simulado).

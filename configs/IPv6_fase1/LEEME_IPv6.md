@@ -32,7 +32,11 @@ Alternativa a `configs/HA_fase1/` (doble pila, de Javi). **No sustituye a nada**
 | `HQ-PCs/interfaces` | Aplicado en los 6 PCs (VLAN 10–60) ✅ |
 | `SW-HQ-ACC1/ovs.sh`, `SW-HQ-ACC2/ovs.sh` | Aplicado; persiste tras reiniciar ✅ |
 | `HQ-DIST1/01_vlan_ipv6.rsc`, `HQ-DIST2/01_vlan_ipv6.rsc` | Aplicado ✅ |
+| `HQ-CORE1/01_direcciones_ipv6.rsc`, `HQ-CORE2/01_direcciones_ipv6.rsc` | Aplicado ✅ |
+| `*/02_ospfv3.rsc` (DIST1/2, CORE1/2) | Aplicado: vecinos *Full* ✅ |
 | `SW-HQ-SRV/ovs_PENDIENTE.sh` | Preparado, sin aplicar |
+
+Router-id de OSPFv3 (solo identificador, no es una dirección): CORE1 3.3.3.1, CORE2 3.3.3.2, DIST1 4.4.4.1, DIST2 4.4.4.2. Una sola área (0) para HQ.
 
 ## Pruebas hechas
 
@@ -40,6 +44,10 @@ Alternativa a `configs/HA_fase1/` (doble pila, de Javi). **No sustituye a nada**
 - Configuración de OVS persistente tras reiniciar ✅
 - Los PCs reciben `2001:db8:1:<vlan>:<EUI-64>` por SLAAC ✅
 - Encaminamiento entre VLAN: ping de HQ-PC-INV a HQ-PC-CUR ✅
+- Enlaces CORE ↔ DIST y CORE1 ↔ CORE2: ping a los dos extremos ✅
+- Antes de OSPF, CORE1 → PC de la VLAN 40: `no route to host`. Con OSPFv3: 3 vecinos *Full* en CORE1, todas las VLAN y loopbacks aprendidas, ping 0 % de pérdidas y traceroute de 2 saltos (DIST2 → PC) ✅
+- Pendiente: comprobar que DIST1 también anuncia las VLAN (con ether5 de CORE1 caído, las rutas deben pasar a ether4).
+- Nota: al meter `lo` en OSPF se anuncia también `::1/128`. No hace daño (cada router tiene la suya y esa ruta queda inactiva).
 
 ## Diferencias con `HA_fase1` (a tener en cuenta si se cambia)
 

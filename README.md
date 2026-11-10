@@ -107,3 +107,65 @@ informe/                        fuentes LaTeX del informe (compilar con XeLaTeX)
 - Gill, Jain, Nagappan. *Understanding Network Failures in Data Centers*. SIGCOMM 2011: <https://people.cs.umass.edu/~phillipa/papers/comm235-gill.pdf>
 - Turner, Levchenko, Snoeren, Savage. *California Fault Lines*. SIGCOMM 2010: <https://people.cs.umass.edu/~phillipa/CSE390/calfault.pdf>
 - Temario *Diseño de Redes* (DDR), Tema 2: topología, redundancia, disponibilidad.
+
+## Estado actual – Fase 1: LAN de HQ (IPv6)
+
+### Decisiones de diseño
+- **HQ y B1 solo con IPv6, B2 solo con IPv4.** La interconexión o traducción entre ellas se decidirá más adelante.
+- Prefijo de HQ: `2001:db8:1::/48` (prefijo de documentación, al ser un entorno simulado).
+- Una `/64` por VLAN, con el número de la VLAN en el 4.º bloque (`2001:db8:1:<vlan>::/64`) para que sea fácil de leer.
+- **SLAAC** para los PCs (asignación dinámica, sin servidor: los DIST envían los RA) y direcciones **estáticas** para servidores y AP.
+- Arquitectura jerárquica: **acceso (Open vSwitch) → distribución (HQ-DIST1/2) → core → FW → borde**, con todos los equipos duplicados.
+
+### VLANs de HQ
+| VLAN | Nombre | Prefijo IPv6 | Asignación |
+|---|---|---|---|
+| 10 | INVESTIGACION | `2001:db8:1:10::/64` | SLAAC |
+| 20 | COMERCIAL | `2001:db8:1:20::/64` | SLAAC |
+| 30 | VENTAS | `2001:db8:1:30::/64` | SLAAC |
+| 40 | CURSOS | `2001:db8:1:40::/64` | SLAAC |
+| 50 | SOPORTE | `2001:db8:1:50::/64` | SLAAC |
+| 60 | INVITADOS | `2001:db8:1:60::/64` | SLAAC |
+| 65 | WIFI-CORP | `2001:db8:1:65::/64` | SLAAC |
+| 70 | ALMACENAMIENTO | `2001:db8:1:70::/64` | Estática |
+| 80 | COMPUTO | `2001:db8:1:80::/64` | Estática |
+| 90 | DMZ | `2001:db8:1:90::/64` | Estática (gateway: FW) |
+| 99 | GESTION | `2001:db8:1:99::/64` | Estática |
+
+Reparto dentro de cada VLAN: `::1` reservada (gateway virtual), `::2` = DIST1, `::3` = DIST2 y `::10` en adelante para los servidores.
+
+### Configurado y probado ✅
+**PCs de HQ (VLAN 10 a 60)** – Docker Alpine, en *Edit config*:
+- IPv6 activado y aceptación de RA (`accept_ra=1`, `autoconf=1`).
+- Cada PC obtiene su dirección `2001:db8:1:<vlan>:<EUI-64>` y dos rutas por defecto (una por DIST).
+
+**Switches de acceso SW-HQ-ACC1 / ACC2** – Open vSwitch:
+- Puertos de acceso con `tag=<vlan>` y troncales 802.1Q hacia DIST1/DIST2 con solo las VLAN necesarias.
+  - ACC1: VLAN 10, 20, 30 y 99
+  - ACC2: VLAN 40, 50, 60, 65 y 99
+- RSTP activo con prioridad 61440, para que un switch de acceso nunca sea root.
+
+**HQ-DIST1 / HQ-DIST2** – MikroTik CHR 7.22:
+- Bridge `br-hq` con filtrado de VLAN y RSTP. **DIST1 es el root** (prioridad `0x1000`) y DIST2 el de respaldo (`0x2000`).
+- Una interfaz VLAN por departamento (`vlan10-INV` … `vlan99-MGMT`) con `::2` (DIST1) o `::3` (DIST2).
+- RA cada 3–10 s con una vida de 30 s, para que la conmutación por fallo del gateway sea rápida.
+- Loopbacks: `2001:db8:1:ffff::31` (DIST1) y `::32` (DIST2).
+- Enlaces hacia los CORE ya direccionados (`ff71`, `ff72`, `ff81`, `ff82`).
+- Los puertos hacia los switches de servidores (ether6 y ether7) están **desactivados** hasta configurar RSTP en SRV1 y SRV2, para evitar bucles.
+
+**Pruebas realizadas**
+- Aislamiento entre VLAN en un mismo switch: el ping entre INV y COM por `fe80::` deja de responder al etiquetar los puertos ✅
+- La configuración de OVS se mantiene tras reiniciar el switch ✅
+- Los PCs obtienen su dirección global por SLAAC ✅
+- Encaminamiento entre VLAN: ping de HQ-PC-INV (VLAN 10) a HQ-PC-CUR (VLAN 40) ✅
+
+### Pendiente ⏳
+- [ ] HQ-CORE1/2: direccionamiento de los enlaces y loopbacks
+- [ ] OSPFv3 en HQ (DIST ↔ CORE ↔ FW ↔ BORDER)
+- [ ] Servidores, AP y switches SW-HQ-SRV1/2 (y activar ether6/ether7 en los DIST)
+- [ ] FW, DMZ y servidor web
+- [ ] Salida a Internet (BORDER e ISP)
+- [ ] B1 (IPv6) y B2 (IPv4)
+- [ ] Interconexión entre sedes (VPN) y convivencia IPv4/IPv6
+- [ ] DNS, seguridad (firewall, RADIUS) y monitorización (Prometheus/Grafana)
+

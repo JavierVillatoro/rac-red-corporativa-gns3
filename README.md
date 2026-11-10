@@ -153,15 +153,35 @@ Reparto dentro de cada VLAN: `::1` reservada (gateway virtual), `::2` = DIST1, `
 - Enlaces hacia los CORE ya direccionados (`ff71`, `ff72`, `ff81`, `ff82`).
 - Los puertos hacia los switches de servidores (ether6 y ether7) están **desactivados** hasta configurar RSTP en SRV1 y SRV2, para evitar bucles.
 
+**HQ-CORE1 / HQ-CORE2** – MikroTik CHR 7.22 (solo encaminan: sin VLAN ni bridge):
+- Cada enlace entre routers es una red propia `2001:db8:1:ffXX::/64`. El equipo de capa superior lleva `::1` y el inferior `::2`.
+  - `ff41`/`ff42`: FW1 → CORE1/CORE2; `ff51`/`ff52`: FW2 → CORE1/CORE2
+  - `ff60`: CORE1 ↔ CORE2
+  - `ff71`/`ff72`: CORE1 → DIST1/DIST2; `ff81`/`ff82`: CORE2 → DIST1/DIST2
+- Loopbacks (dirección fija del router, siempre activa): `2001:db8:1:ffff::21` (CORE1) y `::22` (CORE2).
+- `advertise=no` en todos los enlaces entre routers: allí no hay PCs, así que no se envían RA.
+
+**OSPFv3 en HQ (DIST + CORE)**:
+- Una sola área (0, *backbone*) para HQ.
+- Router-id (solo un identificador, no una dirección): CORE1 `3.3.3.1`, CORE2 `3.3.3.2`, DIST1 `4.4.4.1`, DIST2 `4.4.4.2`.
+- Enlaces entre routers como `type=ptp` (punto a punto: sin elección de DR, converge más rápido).
+- VLAN y loopbacks como `passive`: se anuncian, pero no se buscan vecinos hacia los PCs (más seguro y sin tráfico OSPF en las VLAN).
+- Los enlaces CORE → FW ya están incluidos y se activarán al configurar los FW.
+- Configuración en `configs/IPv6_fase1/<router>/02_ospfv3.rsc`.
+
 **Pruebas realizadas**
 - Aislamiento entre VLAN en un mismo switch: el ping entre INV y COM por `fe80::` deja de responder al etiquetar los puertos ✅
 - La configuración de OVS se mantiene tras reiniciar el switch ✅
 - Los PCs obtienen su dirección global por SLAAC ✅
 - Encaminamiento entre VLAN: ping de HQ-PC-INV (VLAN 10) a HQ-PC-CUR (VLAN 40) ✅
+- Enlaces CORE ↔ DIST y CORE1 ↔ CORE2: ping entre los dos extremos ✅
+- Antes de OSPF, CORE1 → PC de la VLAN 40 da `no route to host`. Con OSPFv3: 3 vecinos *Full* en CORE1, todas las VLAN y loopbacks aprendidas, ping con 0 % de pérdidas y traceroute de 2 saltos (DIST2 → PC) ✅
 
 ### Pendiente ⏳
-- [ ] HQ-CORE1/2: direccionamiento de los enlaces y loopbacks
-- [ ] OSPFv3 en HQ (DIST ↔ CORE ↔ FW ↔ BORDER)
+- [x] HQ-CORE1/2: direccionamiento de los enlaces y loopbacks
+- [x] OSPFv3 entre DIST y CORE
+- [ ] Prueba de redundancia: caída del enlace CORE1–DIST2 (el tráfico debe pasar por DIST1)
+- [ ] OSPFv3 hacia FW y BORDER
 - [ ] Servidores, AP y switches SW-HQ-SRV1/2 (y activar ether6/ether7 en los DIST)
 - [ ] FW, DMZ y servidor web
 - [ ] Salida a Internet (BORDER e ISP)

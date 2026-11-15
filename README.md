@@ -9,7 +9,7 @@ Trabajo final de *Redes de Acceso y Corporativas* (grupo Javi / Pepe / Manu): di
 | Fase | Contenido | Estado |
 |---|---|---|
 | 1 | Direcciones IPv4/IPv6 de los enlaces, loopbacks, WAN con dos ISP | **Hecha y probada**: 49/49 pruebas de ping OK (08/11/2026) |
-| 2 | OSPFv2/OSPFv3 en HQ (+ BFD opcional) | Scripts generados (`02_ospf.rsc`, `03_bfd_opcional.rsc`), **sin probar** |
+| 2 | OSPFv2/OSPFv3 en HQ (+ BFD opcional) | **Hecha y probada** (15/11/2026): vecinos Full, loopbacks anunciadas en IPv4/IPv6. BFD (`03_bfd_opcional.rsc`) sin probar |
 | 3 | VLAN, RSTP, VRRP, DHCP, gateways de cada departamento | Pendiente |
 | 4 | NAT, firewall, DMZ, política Zero Trust entre zonas | Pendiente |
 | 5 | Túneles WireGuard B1/B2 y teletrabajo; OSPF en B1/B2 | Pendiente |
@@ -58,8 +58,10 @@ Los rangos de VLAN y direcciones de usuarios (fases 3 en adelante) están en el 
    python push_config.py 01 --dry-run     # solo muestra qué haría
    python push_config.py 01               # aplica las direcciones a los 14 routers
    python test_fase1.py                   # lanza las 49 pruebas de ping y guarda un informe en logs/
+   python push_config.py 02               # OSPF en los 8 routers de HQ (solo una vez por router)
    ```
    La contraseña de `admin` se pide por teclado (o `RAC_PASS`) y **no se guarda**. Cierra antes las ventanas de consola de los routers: solo admiten un cliente.
+   Revisad que no salga ningún `[ERROR]` en la salida (o en `logs/push_*.txt`): que el script termine no significa que todo haya entrado.
 7. Para apagar: `Control → Stop all nodes`, esperar a que todos estén en rojo, `File → Save project` y entonces salir.
 
 ## Estructura
@@ -89,7 +91,7 @@ informe/                        fuentes LaTeX del informe (compilar con XeLaTeX)
 
 ## Limitaciones conocidas
 
-- Los scripts de la fase 2 en adelante **no están probados** en el router real. Cualquier error de sintaxis de RouterOS: copiad el mensaje exacto.
+- La fase 2 está probada; los scripts de la fase 3 en adelante aún no existen o no están probados. Cualquier error de sintaxis de RouterOS: copiad el mensaje exacto.
 - Que un comando se acepte no prueba que funcione: se valida siempre con ping/traceroute (`test_fase1.py`).
 - La persistencia de la configuración al cerrar y reabrir GNS3 está **por comprobar**.
 - OPNsense (IPS/IDS) no está integrado: los firewalls son CHR. Pendiente de decidir (necesita imagen de ~3 GB).

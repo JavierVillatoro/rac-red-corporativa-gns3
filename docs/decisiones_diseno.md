@@ -50,6 +50,24 @@ Registro de cada decisión tomada durante la configuración: **qué** se decidi�
 - HQ-DIST2 (`/interface bridge port monitor`): ether3 `root-port`; ether4 y ether5 `alternate-port` sin reenviar. **Los dos bucles quedan cortados.**
 - **Observación:** el bloqueo está en DIST2 y no en los switches de acceso, como se esperaba al principio. Los costes RSTP por defecto difieren entre fabricantes (OVS 2000 por puerto, MikroTik 20000), así que en el enlace DIST2–ACC el switch de acceso está "más cerca" de la raíz y queda como designado. El resultado sigue sin bucles; en una red real se fijarían los costes a mano.
 
+### Paso 3.2: direcciones de las VLAN y OSPF
+
+| Decisión | Motivo | Alternativas descartadas |
+|---|---|---|
+| DIST1 `.2` / `::2` y DIST2 `.3` / `::3` en cada VLAN; tercer octeto IPv4 = número de VLAN | Cada DIST tiene una interfaz en cada departamento para enrutar entre VLAN; el número de VLAN se lee en la dirección | — |
+| IPv6 según la VLAN: usuarios (10-50) GUA + ULA; invitados (60) solo GUA; almacenamiento, cómputo y gestión (70, 80, 99) solo ULA | Los invitados solo necesitan Internet; los servicios internos no tienen dirección global, así que no se pueden alcanzar desde Internet aunque falle el firewall (seguridad por diseño) | Las dos familias en todas las VLAN |
+| Redes de las VLAN en OSPF como **pasivas** | Se anuncian al resto de HQ, pero no se envían *hello* a los equipos de usuario: un equipo con OSPF no puede hacerse pasar por router e inyectar rutas | Interfaces activas |
+| Los dos DIST anuncian las mismas VLAN | El CORE tiene dos caminos de igual coste (ECMP) hacia cada VLAN; si cae un DIST, OSPF retira su ruta | — |
+| `advertise=no` en las direcciones IPv6 de este paso | RouterOS envía RA en cuanto una interfaz tiene una /64; se activan en el paso 3.4 para que cada paso haga una sola cosa | — |
+| Líneas de configuración de menos de 200 caracteres | La consola del router mide 200 columnas; las líneas más largas se parten y confunden a `push_config.py` | — |
+
+**Ficheros:** `HQ-DIST1/05_vlan_ip.rsc` y `HQ-DIST2/05_vlan_ip.rsc` (con `push_config.py 05`).
+
+**Pruebas del paso 3.2 (17/11/2026):**
+- HQ-DIST1 → `10.1.10.3` y `2001:db8:1:40::3` (DIST2): 3/3 con TTL 64. Los dos DIST comparten cada VLAN a través del troncal ether3.
+- HQ-CORE1: dos rutas `DAo+` hacia `10.1.10.0/24`, por DIST1 (ether4) y por DIST2 (ether5). Hay ECMP.
+- HQ-BORDER1 → `10.1.40.3` y `fdce:f6ae:a8d8:1099::2`: 3/3 con TTL 62 (FW y CORE en medio). Las VLAN, también las internas en ULA, se anuncian por OSPFv2 y OSPFv3.
+
 ## Pruebas generales y pendientes
 
 - **Persistencia comprobada (17/11/2026):** tras cerrar y reabrir GNS3, HQ-DIST1 conservaba sus direcciones y sus 6 vecinos OSPF. La configuración se guarda en el disco de cada nodo.

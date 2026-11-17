@@ -33,3 +33,6 @@ __pycache__/
 .env
 *.key
 *.pem
+
+# Copia que GNS3 crea al guardar el proyecto
+*.gns3.backup

@@ -36,3 +36,23 @@ Registro de cada decisión tomada durante la configuración: **qué** se decidi�
 | Servidores y AP con direcciones fijas | Deben estar siempre en la misma dirección para poder encontrarlos | DHCP con reserva |
 | DNS provisional `8.8.8.8` / `2001:4860:4860::8888` | Aún no hay DNS interno (fase 4); no afecta a las pruebas de esta fase | — |
 | Orden: 3.1 RSTP + VLAN → 3.2 direcciones + OSPF pasivo → 3.3 VRRP → 3.4 DHCP/SLAAC → 3.5 PCs. Switches de servidores después | Cada paso se prueba antes de pasar al siguiente; RSTP primero para no crear bucles | — |
+| Enlace L16 (DIST1–DIST2) movido a una **VLAN de tránsito 255** (`vlan255-TRANS`), con las mismas IP | Al ser ether3 troncal, entra en el bridge y un puerto del bridge no puede tener IP propia. La plantilla OSPF busca la red `10.1.255.60/30`, así que el vecino sigue solo en la nueva interfaz | Dejar ether3 enrutado (los DIST solo se verían a través de los switches de acceso) |
+| Poda de VLAN: cada troncal lleva solo las VLAN que necesita (ACC1: 10, 20, 30, 99; ACC2: 40, 50, 60, 99) | Menos tráfico de *broadcast* inútil y menos superficie de ataque | Pasar todas las VLAN por todos los troncales |
+| Troncales con `admit-only-vlan-tagged` | Si se conecta por error un equipo sin etiquetas a un troncal, sus tramas se descartan | Admitir tramas sin etiqueta (VLAN nativa) |
+| Puertos de PC como *edge* en RSTP (`rstp-port-admin-edge`) | Un equipo final no crea bucles: el puerto pasa a enviar al instante, sin esperar a RSTP | Puerto normal (el PC tarda segundos en tener red) |
+| AP Wi-Fi en la VLAN 60 (invitados) | El plan dice que la Wi-Fi es para invitados, que solo tienen Internet | VLAN propia para la Wi-Fi (no está en el plan) |
+
+**Ficheros:** `HQ-DIST1/04_vlan_rstp.rsc` y `HQ-DIST2/04_vlan_rstp.rsc` (con `push_config.py 04`); `SW-HQ-ACC1/04_vlan_rstp.sh` y `SW-HQ-ACC2/04_vlan_rstp.sh` (se pegan en la consola del switch: el script solo habla con RouterOS).
+
+**Pruebas del paso 3.1 (17/11/2026):**
+- HQ-DIST1: `root-bridge: yes` (`bridge-id 0x1000`). Vecino OSPF con DIST2 en `Full` por `vlan255-TRANS` (v2 y v3); ping a `10.1.255.62` 3/3 con TTL 64.
+- SW-HQ-ACC1 (`ovs-appctl rstp/show`): reconoce a DIST1 como raíz (prioridad 4096), `root-port eth0`.
+- HQ-DIST2 (`/interface bridge port monitor`): ether3 `root-port`; ether4 y ether5 `alternate-port` sin reenviar. **Los dos bucles quedan cortados.**
+- **Observación:** el bloqueo está en DIST2 y no en los switches de acceso, como se esperaba al principio. Los costes RSTP por defecto difieren entre fabricantes (OVS 2000 por puerto, MikroTik 20000), así que en el enlace DIST2–ACC el switch de acceso está "más cerca" de la raíz y queda como designado. El resultado sigue sin bucles; en una red real se fijarían los costes a mano.
+
+## Pruebas generales y pendientes
+
+- **Persistencia comprobada (17/11/2026):** tras cerrar y reabrir GNS3, HQ-DIST1 conservaba sus direcciones y sus 6 vecinos OSPF. La configuración se guarda en el disco de cada nodo.
+- **Pendiente:** HQ-MON (Prometheus) no arranca (en rojo) y provoca un aviso de uBridge al iniciar el proyecto. Se revisará en la fase 6 (falta `prometheus.yml` o la imagen Docker).
+- **Pendiente (seguridad):** los puertos libres de los OVS (sin `tag` ni `trunks`) aceptan todas las VLAN. Aquí no tienen cable; en una red real se desactivarían.
+- Añadido `*.gns3.backup` al `.gitignore` (copia que crea GNS3 al guardar).

@@ -105,9 +105,28 @@ Registro de cada decisión tomada durante la configuración: **qué** se decidi�
 
 **Pruebas del paso 3.4 (18/11/2026):** `push_config.py 07` sin errores (32 comandos por DIST). En HQ-DIST1: 6 servidores DHCP activos, pools de 75 direcciones `.100–.174`, entrada RA `interface=all` desactivada y 6 entradas por VLAN con `ra-interval=3s-10s` y `ra-lifetime=30s`, prefijos de las VLAN 10-50 con `advertise=yes` y `vlan255-TRANS` con `no`. La prueba real (equipos recibiendo dirección) se hace en el paso 3.5.
 
+### Paso 3.5: equipos de usuario
+
+| Decisión | Motivo | Alternativas descartadas |
+|---|---|---|
+| Los 6 PCs con el mismo `/etc/network/interfaces` (Edit config de GNS3); solo cambia `hostname` | La VLAN la decide el puerto del switch, no el equipo. El `hostname` viaja en la petición DHCP y aparece en los préstamos del DIST | Configuración estática en cada PC |
+| IPv4 `inet dhcp`; IPv6 `inet6 manual` con `disable_ipv6=0`, `accept_ra=1` y `autoconf=1` | Los contenedores Docker traen IPv6 desactivado; así el equipo acepta los RA y forma su dirección por SLAAC | — |
+
+**Ficheros:** `HQ-PCs/08_interfaces` (se pega en *Edit config* de cada PC y se reinicia el PC).
+
+**Pruebas del paso 3.5 (18/11/2026):**
+- HQ-PC-INV: DHCP en directo (Discover, Offer, Request, Ack); `10.1.10.250` de DIST2 (`10.1.10.3`), pasarela `10.1.10.1` (VRRP), DNS `8.8.8.8`. IPv6 GUA y ULA por SLAAC (EUI-64 a partir de la MAC) y **dos rutas por defecto `fe80::`**, una por DIST.
+- HQ-PC-CUR: `10.1.40.174` de DIST1 (`10.1.40.2`), así que los dos servidores DHCP reparten. GUA y ULA.
+- HQ-PC-GUEST: `10.1.60.250` y **solo GUA**, sin ULA, como se diseñó.
+- Desde HQ-PC-INV: ping a HQ-PC-CUR en IPv4 y en IPv6 (TTL 63: un router en medio, el DIST); ping a la loopback de HQ-BORDER1 en IPv4 y en IPv6 (TTL 61); traceroute `10.1.10.2` (DIST1) → `10.1.255.49` (CORE1) → `10.1.255.33` (FW2) → `10.1.254.1` (BORDER1).
+
 ## Pruebas generales y pendientes
 
 - **Persistencia comprobada (17/11/2026):** tras cerrar y reabrir GNS3, HQ-DIST1 conservaba sus direcciones y sus 6 vecinos OSPF. La configuración se guarda en el disco de cada nodo.
 - **Pendiente:** HQ-MON (Prometheus) no arranca (en rojo) y provoca un aviso de uBridge al iniciar el proyecto. Se revisará en la fase 6 (falta `prometheus.yml` o la imagen Docker).
 - **Pendiente (seguridad):** los puertos libres de los OVS (sin `tag` ni `trunks`) aceptan todas las VLAN. Aquí no tienen cable; en una red real se desactivarían.
 - Añadido `*.gns3.backup` al `.gitignore` (copia que crea GNS3 al guardar).
+- **Pendiente (paso 3.5):** prueba de fallo completa: un PC haciendo ping continuo mientras se apaga HQ-DIST1 en GNS3, para contar los segundos perdidos (VRRP, RSTP y OSPF). Al parar un nodo en GNS3 el puerto del vecino no se cae, así que es posible que OSPF tarde hasta 40 s (*dead-interval*) en retirar las rutas del DIST caído; en ese caso se probará BFD (`03_bfd_opcional.rsc`).
+- **Pendiente (paso 3.5):** configurar los switches de servidores SW-HQ-SRV1/2 (VLAN 70 y 80) y meter ether6/ether7 en el bridge de los DIST.
+- **Pendiente (fase 4):** salida a Internet (NAT en los bordes y ruta por defecto por OSPF) y firewall: hoy HQ-PC-GUEST alcanza los equipos internos porque los DIST enrutan entre todas las VLAN.
+- **Pendiente (fase 4):** Alpine (busybox) no procesa la opción RDNSS del RA; el DNS les llega por DHCPv4. Valorar si hace falta.

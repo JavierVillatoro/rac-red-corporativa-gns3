@@ -1,0 +1,14 @@
+# PCs de HQ (Docker Alpine) - Fase 3.5. En GNS3: parar el PC, clic derecho -> Edit config
+# (/etc/network/interfaces, persistente), dejar este bloque y volver a arrancar el PC.
+# Mismo bloque en los 6 PCs; solo cambia la linea "hostname" (nombre del nodo):
+#   HQ-PC-INV (VLAN 10), HQ-PC-COM (20), HQ-PC-VEN (30), HQ-PC-CUR (40), HQ-PC-SOP (50), HQ-PC-GUEST (60)
+# La VLAN la decide el puerto del switch de acceso, no el PC.
+# IPv4: DHCP (DIST1 o DIST2, pasarela .1 de VRRP). IPv6: SLAAC con los RA de los dos DIST.
+
+auto eth0
+iface eth0 inet dhcp
+	hostname HQ-PC-INV
+iface eth0 inet6 manual
+	pre-up echo 0 > /proc/sys/net/ipv6/conf/eth0/disable_ipv6
+	pre-up echo 1 > /proc/sys/net/ipv6/conf/eth0/accept_ra
+	pre-up echo 1 > /proc/sys/net/ipv6/conf/eth0/autoconf

@@ -87,6 +87,24 @@ Registro de cada decisión tomada durante la configuración: **qué** se decidi�
 - Fallo simulado (`/interface vrrp disable vrrp10-INV` en DIST1): DIST2 pasa `vrrp10-INV` de `B` a `RM` y asume la pasarela. Al reactivarlo, DIST1 vuelve a ser maestro (*preemption*).
 - Pendiente: prueba de fallo completa (apagar un DIST entero con un equipo haciendo ping) en el paso 3.5, para medir el tiempo de recuperación.
 
+### Paso 3.4: DHCPv4 y SLAAC
+
+| Decisión | Motivo | Alternativas descartadas |
+|---|---|---|
+| DHCP y RA solo en las VLAN 10-60 (usuarios e invitados) | Las VLAN 70, 80 y 99 tienen direcciones fijas: un servidor DHCP allí sería un servicio innecesario que puede fallar o ser atacado | DHCP en todas las VLAN |
+| DHCPv4 entrega como pasarela la `.1` (VRRP), no la `.2` o `.3` del DIST que responde | El equipo se beneficia de VRRP le haya dado la dirección quien se la haya dado | Entregar la dirección propia de cada DIST |
+| Rangos sin solape: DIST1 `.100–.174` y DIST2 `.175–.250` (75 + 75 por VLAN) | Nunca dan la misma IP a dos equipos. Aunque caiga un DIST, quedan 75 direcciones por VLAN, más que los puestos del mayor departamento (Investigación, 60) | Un único servidor con todo el rango |
+| `authoritative=no` en los servidores DHCP | Un servidor autoritario responde NAK a las peticiones de IP que no conoce; con dos servidores, al renovar una IP del otro DIST, el equipo la perdería | Autoritario (el valor por defecto) |
+| Préstamo (*lease*) de 1 h | Si un equipo desaparece, su dirección vuelve pronto al rango | Préstamos muy cortos (más tráfico de renovación) o muy largos (las direcciones de equipos que ya no están tardan en liberarse) |
+| Desactivar la entrada de RA por defecto (`interface=all`) y crear una por VLAN de usuarios | La entrada por defecto anunciaría el router por todas las interfaces, incluidos los enlaces y las interfaces VRRP | Dejar la entrada por defecto |
+| RA cada 3-10 s y `ra-lifetime=30s` | Si un DIST cae, sus equipos lo descartan como pasarela en 30 s como máximo. Los valores de fábrica son RA cada 200-600 s y 30 min de vida | Valores por defecto |
+| Prefijos GUA y ULA anunciados en las VLAN de usuarios | El equipo obtiene dos direcciones: GUA para Internet y ULA para lo interno | Solo GUA |
+| DNS en el RA (`advertise-dns`, RDNSS), tomado de `/ip dns` | El equipo recibe el DNS sin servidor DHCPv6 | DHCPv6 sin estado |
+
+**Ficheros:** `HQ-DIST1/07_dhcp_slaac.rsc` y `HQ-DIST2/07_dhcp_slaac.rsc` (con `push_config.py 07`).
+
+**Pruebas del paso 3.4 (18/11/2026):** `push_config.py 07` sin errores (32 comandos por DIST). En HQ-DIST1: 6 servidores DHCP activos, pools de 75 direcciones `.100–.174`, entrada RA `interface=all` desactivada y 6 entradas por VLAN con `ra-interval=3s-10s` y `ra-lifetime=30s`, prefijos de las VLAN 10-50 con `advertise=yes` y `vlan255-TRANS` con `no`. La prueba real (equipos recibiendo dirección) se hace en el paso 3.5.
+
 ## Pruebas generales y pendientes
 
 - **Persistencia comprobada (17/11/2026):** tras cerrar y reabrir GNS3, HQ-DIST1 conservaba sus direcciones y sus 6 vecinos OSPF. La configuración se guarda en el disco de cada nodo.

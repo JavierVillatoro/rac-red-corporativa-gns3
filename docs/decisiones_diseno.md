@@ -68,6 +68,25 @@ Registro de cada decisión tomada durante la configuración: **qué** se decidi�
 - HQ-CORE1: dos rutas `DAo+` hacia `10.1.10.0/24`, por DIST1 (ether4) y por DIST2 (ether5). Hay ECMP.
 - HQ-BORDER1 → `10.1.40.3` y `fdce:f6ae:a8d8:1099::2`: 3/3 con TTL 62 (FW y CORE en medio). Las VLAN, también las internas en ULA, se anuncian por OSPFv2 y OSPFv3.
 
+### Paso 3.3: VRRP (pasarela virtual)
+
+| Decisión | Motivo | Alternativas descartadas |
+|---|---|---|
+| Una interfaz VRRP por VLAN con la pasarela `.1/32`; VRID = número de VLAN | Los equipos usan siempre la `.1`; el VRID identifica la pareja de DIST en cada VLAN y coincide con la VLAN para leerlo fácil. MikroTik recomienda `/32` para la dirección virtual, porque la red ya está en la interfaz de la VLAN | Dar a los equipos la `.2` o la `.3` (si cae ese DIST, se quedan sin salida) |
+| Prioridad 200 para el maestro y 100 para el respaldo: DIST1 maestro en las VLAN 10, 20, 30 y 70; DIST2 en las 40, 50, 60, 80 y 99 | Reparto de carga: cada DIST es la pasarela principal de "su" switch de acceso y respaldo del otro | Un solo maestro para todo (el otro DIST, ocioso) |
+| *Preemption* activado (por defecto) | Cuando el DIST caído vuelve, recupera sus VLAN y el reparto de carga se restablece solo | Sin *preemption* (el reparto quedaría descompensado tras un fallo) |
+| VRRP solo en IPv4 | En IPv6 la redundancia la dan los RA de los dos DIST (paso 3.4) | VRRP también para IPv6 |
+
+**Cómo funciona:** el maestro envía un anuncio cada segundo (multicast `224.0.0.18`) por la VLAN, que llega al otro DIST por el troncal ether3. Si el respaldo pasa unos 3 s sin oírlo, asume la `.1` con la **misma MAC virtual** `00:00:5E:00:01:<VRID en hexadecimal>`, así que los equipos no tienen que actualizar su ARP.
+
+**Ficheros:** `HQ-DIST1/06_vrrp.rsc` y `HQ-DIST2/06_vrrp.rsc` (con `push_config.py 06`).
+
+**Pruebas del paso 3.3 (18/11/2026):**
+- `/interface vrrp print`: DIST1 `RM` (*running master*) en las VLAN 10, 20, 30 y 70 y `B` (*backup*) en el resto; DIST2 al revés. MAC virtual `00:00:5E:00:01:0A` en la VLAN 10 (`0A` = 10).
+- HQ-BORDER1 → `10.1.10.1` y `10.1.40.1`: 3/3 (TTL 62). La primera la responde DIST1 y la segunda DIST2.
+- Fallo simulado (`/interface vrrp disable vrrp10-INV` en DIST1): DIST2 pasa `vrrp10-INV` de `B` a `RM` y asume la pasarela. Al reactivarlo, DIST1 vuelve a ser maestro (*preemption*).
+- Pendiente: prueba de fallo completa (apagar un DIST entero con un equipo haciendo ping) en el paso 3.5, para medir el tiempo de recuperación.
+
 ## Pruebas generales y pendientes
 
 - **Persistencia comprobada (17/11/2026):** tras cerrar y reabrir GNS3, HQ-DIST1 conservaba sus direcciones y sus 6 vecinos OSPF. La configuración se guarda en el disco de cada nodo.
